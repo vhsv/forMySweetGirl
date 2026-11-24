@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dla mojego szkraba</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #fff0f6, #ffd6e7, #ffeaf2);
+    font-family: Georgia, serif;
+}
+
+.container {
+    position: relative;
+    text-align: center;
+    z-index: 2;
+    padding: 20px;
+}
+
+h1 {
+    color: #d63384;
+    font-size: clamp(30px, 5vw, 48px);
+    margin-bottom: 15px;
+    opacity: 0;
+    animation: appear 2s ease forwards 2s;
+}
+
+.message {
+    color: #a83268;
+    font-size: 20px;
+    font-style: italic;
+    opacity: 0;
+    animation: appear 2s ease forwards 3s;
+}
+
+.rose {
+    position: relative;
+    width: 220px;
+    height: 340px;
+    margin: 0 auto 20px;
+    animation: grow 2s ease-out forwards;
+    transform-origin: bottom;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* Łodyga */
+.stem {
+    stroke: #378c52;
+    stroke-width: 7;
+    fill: none;
+    stroke-dasharray: 250;
+    stroke-dashoffset: 250;
+    animation: draw 2s ease forwards 1s;
+}
+
+/* Liście */
+.leaf {
+    fill: #55a96a;
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: leafAppear 1s ease forwards 2s;
+}
+
+/* Płatki róży – rozkwitają od środka kwiatu */
+.petal {
+    fill: #ed4b91;
+    stroke: #b5245f;
+    stroke-width: 1.2;
+    stroke-linejoin: round;
+    transform-box: view-box;
+    transform-origin: 110px 112px;
+    opacity: 0;
+    animation: bloom 1.5s ease forwards;
+    animation-delay: var(--d, 1.5s);
+}
+
+/* Zwinięty środek (spirala) */
+.swirl {
+    fill: none;
+    stroke: #8c1049;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+}
+
+.center {
+    fill: #ff9ac2;
+    opacity: 0;
+    animation: bloom 1s ease forwards 2.8s;
+}
+
+.heart {
+    position: fixed;
+    bottom: -40px;
+    color: #ed4b91;
+    font-size: 22px;
+    pointer-events: none;
+    z-index: 1;
+    animation: floatUp linear forwards;
+}
+
+button {
+    margin-top: 30px;
+    padding: 13px 27px;
+    border: none;
+    border-radius: 30px;
+    background: #e84393;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    opacity: 0;
+    animation: appear 1s ease forwards 4s;
+    box-shadow: 0 5px 20px #e8439340;
+}
+
+button:hover {
+    background: #c72d78;
+    transform: scale(1.08);
+}
+
+@keyframes draw {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes bloom {
+    from {
+        opacity: 0;
+        transform: scale(0) rotate(-30deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes grow {
+    from { transform: scale(0.2); }
+    to { transform: scale(1); }
+}
+
+@keyframes leafAppear {
+    to { opacity: 1; }
+}
+
+@keyframes appear {
+    to { opacity: 1; }
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(0.5);
+        opacity: 0;
+    }
+    15% { opacity: 0.9; }
+    100% {
+        transform: translateY(-110vh) rotate(360deg) scale(1.4);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Wszystko w końcu się ułoży &hearts;</h1>
+
+    <div class="rose" id="rose">
+        <svg viewBox="0 0 220 340">
+
+            <defs>
+                <!-- Gradienty: ciemniej przy środku, jaśniej na brzegach płatków -->
+                <radialGradient id="g1" cx="50%" cy="100%" r="110%">
+                    <stop offset="0%" stop-color="#e0457f"/>
+                    <stop offset="100%" stop-color="#ff9cc2"/>
+                </radialGradient>
+                <radialGradient id="g2" cx="50%" cy="100%" r="110%">
+                    <stop offset="0%" stop-color="#c2185b"/>
+                    <stop offset="100%" stop-color="#f471a5"/>
+                </radialGradient>
+                <radialGradient id="g3" cx="50%" cy="100%" r="110%">
+                    <stop offset="0%" stop-color="#a3124f"/>
+                    <stop offset="100%" stop-color="#e5427f"/>
+                </radialGradient>
+                <radialGradient id="g4" cx="50%" cy="100%" r="110%">
+                    <stop offset="0%" stop-color="#7d0c40"/>
+                    <stop offset="100%" stop-color="#cf2a70"/>
+                </radialGradient>
+            </defs>
+
+            <!-- Łodyga -->
+            <path class="stem"
+                d="M110 165 C110 220 105 260 110 325" />
+
+            <!-- Liście -->
+            <path class="leaf"
+                d="M108 245 Q50 200 48 245 Q70 275 108 245Z" />
+
+            <path class="leaf"
+                d="M110 275 Q165 225 180 260 Q160 290 110 275Z" />
+
+            <!-- Róża: środek kwiatu w punkcie (110,112) -->
+            <g>
+                <!-- Warstwa 1: duże zewnętrzne płatki -->
+                <g transform="rotate(0 110 112)">
+                    <path class="petal" style="--d:1.5s;fill:url(#g1)"
+                        d="M110 112 C78 112 58 88 63 61 C67 38 95 31 110 38 C125 31 153 38 157 61 C162 88 142 112 110 112Z"/>
+                </g>
+                <g transform="rotate(72 110 112)">
+                    <path class="petal" style="--d:1.6s;fill:url(#g1)"
+                        d="M110 112 C78 112 58 88 63 61 C67 38 95 31 110 38 C125 31 153 38 157 61 C162 88 142 112 110 112Z"/>
+                </g>
+                <g transform="rotate(144 110 112)">
+                    <path class="petal" style="--d:1.7s;fill:url(#g1)"
+                        d="M110 112 C78 112 58 88 63 61 C67 38 95 31 110 38 C125 31 153 38 157 61 C162 88 142 112 110 112Z"/>
+                </g>
+                <g transform="rotate(216 110 112)">
+                    <path class="petal" style="--d:1.8s;fill:url(#g1)"
+                        d="M110 112 C78 112 58 88 63 61 C67 38 95 31 110 38 C125 31 153 38 157 61 C162 88 142 112 110 112Z"/>
+                </g>
+                <g transform="rotate(288 110 112)">
+                    <path class="petal" style="--d:1.9s;fill:url(#g1)"
+                        d="M110 112 C78 112 58 88 63 61 C67 38 95 31 110 38 C125 31 153 38 157 61 C162 88 142 112 110 112Z"/>
+                </g>
+
+                <!-- Warstwa 2: średnie płatki, przesunięte o połowę -->
+                <g transform="rotate(36 110 112)">
+                    <path class="petal" style="--d:2.0s;fill:url(#g2)"
+                        d="M110 112 C85 112 70 94 74 73 C78 54 99 48 110 54 C121 48 142 54 146 73 C150 94 135 112 110 112Z"/>
+                </g>
+                <g transform="rotate(108 110 112)">
+                    <path class="petal" style="--d:2.1s;fill:url(#g2)"
+                        d="M110 112 C85 112 70 94 74 73 C78 54 99 48 110 54 C121 48 142 54 146 73 C150 94 135 112 110 112Z"/>
+                </g>
+                <g transform="rotate(180 110 112)">
+                    <path class="petal" style="--d:2.2s;fill:url(#g2)"
+                        d="M110 112 C85 112 70 94 74 73 C78 54 99 48 110 54 C121 48 142 54 146 73 C150 94 135 112 110 112Z"/>
+                </g>
+                <g transform="rotate(252 110 112)">
+                    <path class="petal" style="--d:2.3s;fill:url(#g2)"
+                        d="M110 112 C85 112 70 94 74 73 C78 54 99 48 110 54 C121 48 142 54 146 73 C150 94 135 112 110 112Z"/>
+                </g>
+                <g transform="rotate(324 110 112)">
+                    <path class="petal" style="--d:2.4s;fill:url(#g2)"
+                        d="M110 112 C85 112 70 94 74 73 C78 54 99 48 110 54 C121 48 142 54 146 73 C150 94 135 112 110 112Z"/>
+                </g>
+
+                <!-- Warstwa 3: mniejsze płatki -->
+                <g transform="rotate(18 110 112)">
+                    <path class="petal" style="--d:2.5s;fill:url(#g3)"
+                        d="M110 112 C93 112 83 98 86 83 C89 69 103 65 110 68 C117 65 131 69 134 83 C137 98 127 112 110 112Z"/>
+                </g>
+                <g transform="rotate(108 110 112)">
+                    <path class="petal" style="--d:2.6s;fill:url(#g3)"
+                        d="M110 112 C93 112 83 98 86 83 C89 69 103 65 110 68 C117 65 131 69 134 83 C137 98 127 112 110 112Z"/>
+                </g>
+                <g transform="rotate(198 110 112)">
+                    <path class="petal" style="--d:2.7s;fill:url(#g3)"
+                        d="M110 112 C93 112 83 98 86 83 C89 69 103 65 110 68 C117 65 131 69 134 83 C137 98 127 112 110 112Z"/>
+                </g>
+                <g transform="rotate(288 110 112)">
+                    <path class="petal" style="--d:2.8s;fill:url(#g3)"
+                        d="M110 112 C93 112 83 98 86 83 C89 69 103 65 110 68 C117 65 131 69 134 83 C137 98 127 112 110 112Z"/>
+                </g>
+
+                <!-- Warstwa 4: zwinięty środek -->
+                <g transform="rotate(50 110 112)">
+                    <path class="petal" style="--d:2.9s;fill:url(#g4)"
+                        d="M110 113 C98 113 91 104 94 94 C97 84 106 81 110 83 C116 79 126 85 125 97 C124 107 118 113 110 113Z"/>
+                </g>
+                <g transform="rotate(-40 110 112)">
+                    <path class="petal" style="--d:3.0s;fill:url(#g4)"
+                        d="M110 112 C102 112 97 106 99 99 C101 92 107 90 110 91 C115 89 121 93 120 100 C119 107 115 112 110 112Z"/>
+                </g>
+
+                <!-- Spirala w środku -->
+                <path class="petal swirl" style="--d:3.1s"
+                    d="M110 104 C105 104 103 110 108 111 C114 112 117 104 111 100 C104 96 98 104 102 111"/>
+            </g>
+
+        </svg>
+    </div>
+
+    <p class="message">
+        <q>(…) na zgliszczach najpiękniejszy wyrasta owoc. </q>
+        <br>
+        ~ Maja Lidia Kossakowska
+        <br>
+       <b> Kocham Cię!</b>
+    </p>
+
+
+</div>
+
+<script>
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+
+    const hearts = ["♥", "♡", "❤", "💕"];
+    heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (15 + Math.random() * 25) + "px";
+    heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 10000);
+}
+
+setInterval(createHeart, 450);
+
+</script>
+
+</body>
+</html>
